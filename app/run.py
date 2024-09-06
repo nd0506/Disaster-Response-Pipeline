@@ -15,14 +15,23 @@ from sqlalchemy import create_engine
 app = Flask(__name__)
 
 def tokenize(text):
+    """ Tokenize input messages
+    Args:
+        text: messages to classify
+    Returns:
+        clean_tokens: messages have been normalized, tokenized, and lemmatized
+    """
+    
+    text = re.sub(r'[^a-zA-Z0-9]', " ", text)
+    
+    # tokenize text 
     tokens = word_tokenize(text)
+    
+    # initate WordnetLemmatizer
     lemmatizer = WordNetLemmatizer()
-
-    clean_tokens = []
-    for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
-        clean_tokens.append(clean_tok)
-
+    
+    # Lemmatize, remove stopwords, normalize and remove blank space before and after the tokens
+    clean_tokens = [lemmatizer.lemmatize(tok).lower().strip() for tok in tokens if tok not in stopwords.words('english')]
     return clean_tokens
 
 # load data
@@ -33,13 +42,12 @@ df = pd.read_sql_table('processed_messages', engine)
 model = joblib.load("../models/classifier.pkl")
 
 
-# index webpage displays cool visuals and receives user input text for model
+# index webpage displays visuals and receives user input text for model
 @app.route('/')
 @app.route('/index')
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     
