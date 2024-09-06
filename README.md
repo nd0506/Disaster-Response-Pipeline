@@ -22,6 +22,9 @@ The project will include a web app where an emergency worker can input a new mes
   * `master.html`: Main page of web app
   * `go.html` : Classification result of web app
 
+### README.md
+Project instruction
+
 ## How to run the codes:
 1. Run the following commands in the project's root directory to set up your database and model.
 
