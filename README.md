@@ -15,7 +15,6 @@ The project will include a web app where an emergency worker can input a new mes
 
 ### model
 * `train_classifier.py`: File that runs the model
-*  `classifier.pkl`: Saved model
 ### app
 * `run.py`: Flask file that runs app
   
