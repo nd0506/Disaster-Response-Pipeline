@@ -57,7 +57,7 @@ def clean_data(df):
     # Assert that there are no duplicated rows after deduplication
     assert len(df[df.duplicated()]) == 0
     
-    # clean df by filtering out messages has value: #NAME? and unreasonal value in column related
+    # clean df by filtering out messages has value: #NAME? and unreasonable value in column related
     df = df[(df['message']!='#NAME?') & (df['related']!=2)]
     
     return df
