@@ -58,7 +58,7 @@ def clean_data(df):
     assert len(df[df.duplicated()]) == 0
     
     # clean df by filtering out messages has value: #NAME? and unreasonable value in column related
-    df = df[(df['message']!='#NAME?') & (df['related'] !=2)]
+    df = df[(df['message']!='#NAME?') & (df['related']!=2)]
     
     return df
 
