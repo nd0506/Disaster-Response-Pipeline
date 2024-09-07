@@ -50,25 +50,47 @@ def index():
     # extract data needed for visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    # To get TOP 10 category name count
+    top_category_count = df.iloc[:,4:].sum().sort_values(ascending=False)[1:11]
+    top_category_names = list(top_category_count.index)
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
     graphs = [
         {
-            'data': [
+            "data": [
                 Bar(
                     x=genre_names,
                     y=genre_counts
                 )
             ],
 
-            'layout': {
-                'title': 'Distribution of Message Genres',
-                'yaxis': {
-                    'title': "Count"
+            "layout": {
+                "title": "Distribution of Message Genres",
+                "yaxis": {
+                    "title": "Count"
                 },
-                'xaxis': {
-                    'title': "Genre"
+                "xaxis": {
+                    "title": "Genre"
+                }
+            }
+        },
+
+        {
+            "data": [
+                Bar(
+                    x=top_category_names,
+                    y=top_category_count
+                )
+            ],
+
+            "layout": {
+                "title": "Top Ten Categories",
+                "yaxis": {
+                    "title": "Count"
+                },
+                "xaxis": {
+                    "title": "Categories"
                 }
             }
         }
