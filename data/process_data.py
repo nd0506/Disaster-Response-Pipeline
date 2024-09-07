@@ -31,24 +31,35 @@ def clean_data(df):
     """
     # create new categories columns by splitting old categories column
     categories = df['categories'].str.split(';', expand = True)
+    
     # create new head for categories 
     # by using the first string before '-' of values in the first row
     new_header = categories.iloc[0].astype(str).apply(lambda x: x.split('-')[0])
+    
     # apply new column names
     categories.columns = new_header
+    
     # convert values in categories columns to int by
     # looping through each column and take the number after '-', then covnerting them to int
     for column in categories.columns:
         categories[column] = categories[column].astype(str).str.split('-').str[1]
         categories[column] = categories[column].astype(int)
+        
     # drop the old categories column
     df = df.drop(columns=['categories'])
+    
     # concat new categories columns with inital dataframe
     df = pd.concat([df, categories], axis=1)
+    
     # drop duplicates where messages have the same id
     df  = df.drop_duplicates(subset=['id'])
-    # clean df by filtering out messages has value: #NAME?
-    df = df[df['message']!='#NAME?']
+    
+    # Assert that there are no duplicated rows after deduplication
+    assert len(df[df.duplicated()]) == 0
+    
+    # clean df by filtering out messages has value: #NAME? and unreasonal value in column related
+    df = df[(df['message']!='#NAME?') & (~df['related']==2)]
+    
     return df
 
 
@@ -63,7 +74,7 @@ def save_data(df, database_filename):
     # create database
     engine = create_engine(f'sqlite:///{database_filename}')
     # load df to sql table
-    df.to_sql('processed_messages', engine, index=False)
+    df.to_sql('processed_messages', engine, if_exists = 'replace', index=False)
 
               
 
